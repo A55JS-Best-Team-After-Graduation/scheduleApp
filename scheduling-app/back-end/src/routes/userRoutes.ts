@@ -1,6 +1,6 @@
 // routes/userRoutes.ts
 import express from 'express';
-import { registerUser, loginUser } from '../controllers/userController';
+import { registerUser, loginUser, updateUser } from '../controllers/userController';
 
 const router = express.Router();
 
@@ -11,6 +11,6 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 
 // Route for update user data
-router.post('/:id', );
+router.post('/:userId', updateUser);
 
 export default router;
