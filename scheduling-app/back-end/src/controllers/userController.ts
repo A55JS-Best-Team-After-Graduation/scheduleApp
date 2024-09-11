@@ -65,7 +65,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Generate JWT token
-    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY as string, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY as string, { expiresIn: '1h' });
 
     res.status(200).json({ token });
   } catch (error) {
@@ -131,6 +131,44 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
     res.status(200).json({ message: 'User updated successfully', user });
   } catch (error) {
     console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// Delete a user by their ID
+export const deleteUserById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId } = req.params; // Assumes the user ID is provided in the URL
+
+    // Find the user and delete
+    const user = await User.findByIdAndDelete(userId);
+
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// Fetch all users
+export const fetchAllUsers = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    // Get all users from the database
+    const users = await User.find({}, { password: 0 }); // Exclude password field
+
+    if (users.length === 0) {
+      res.status(404).json({ message: 'No users found' });
+      return;
+    }
+
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error('Error fetching users:', error);
     res.status(500).json({ error: 'Server error' });
   }
 };

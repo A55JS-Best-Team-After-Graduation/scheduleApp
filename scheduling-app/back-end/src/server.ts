@@ -1,7 +1,5 @@
 import { createServer } from 'http';
 import { Server as SocketIOServer, Socket } from 'socket.io';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
@@ -13,13 +11,6 @@ import User from './models/User'; // Import User model
 
 // Load environment variables
 dotenv.config();
-
-// Get __dirname equivalent in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Connect to MongoDB
-connectDB();
 
 // Get environment variables or define them with default values
 const getEnvVariable = (key: string, defaultValue?: string): string => {
@@ -36,10 +27,13 @@ const PORT: number = parseInt(getEnvVariable('PORT', '3500'), 10);
 const parseOrigins = (origins: string): string[] => origins.split(',').map((origin) => origin.trim());
 const isCORSDisabled = process.env.CORS_ORIGIN_PROD === 'false';
 const CORS_ORIGIN = process.env.NODE_ENV === 'production'
-  ? isCORSDisabled
-    ? false
-    : process.env.CORS_ORIGIN_PROD || ''
-  : parseOrigins(process.env.CORS_ORIGIN_DEV || '');
+? isCORSDisabled
+? false
+: process.env.CORS_ORIGIN_PROD || ''
+: parseOrigins(process.env.CORS_ORIGIN_DEV || '');
+
+// Connect to MongoDB
+connectDB();
 
 // Create HTTP server
 const httpServer = createServer(app);
