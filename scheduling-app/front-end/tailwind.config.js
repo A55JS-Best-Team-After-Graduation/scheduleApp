@@ -5,7 +5,13 @@ export default {
     './src/**/*.{js,ts,jsx,tsx}',  // Add support for JS, TS, JSX, TSX files
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'teams-left': '#f0f4f8',  
+        'chat': '#e0e4e8',        
+      },
+
+    },
   },
   plugins: [],
 }
