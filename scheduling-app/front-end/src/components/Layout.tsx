@@ -16,16 +16,14 @@ export function Layout({
 }: LayoutProps) {
 
     return (
-        
-        <div className="flex flex-col lg:flex-row"> {/* adjusts the layout to stack elements vertically on smaller screens and horizontally on larger screens */}
-
+        <div className="flex flex-col lg:flex-row">
             {/* Start nav sidebar-menu */}
             <NavBar selected={selectedNavBarButton} />
             {/* End nav sidebar-menu */}
 
             {/* Optional left rail content */}
             {leftRailContent && (
-                <div className="lg:w-[380px] lg:block hidden">
+                <div className="w-full lg:w-[380px] bg-teams-left p-4">
                     <div className="tab-content active">{leftRailContent}</div>
                 </div>
             )}
@@ -37,7 +35,7 @@ export function Layout({
 
             {/* Optional right rail content */}
             {rightRailContent && (
-                <div className="lg:w-[380px] lg:block hidden">
+                <div className="w-full lg:w-[380px] bg-chat p-4">
                     <div className="tab-content active">{rightRailContent}</div>
                 </div>
             )}
