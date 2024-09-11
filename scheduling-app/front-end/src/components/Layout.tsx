@@ -1,44 +1,46 @@
-// import { ReactNode } from "react";
-// import { NavBar } from "./NavBar";
+import { ReactNode } from "react";
+import { NavBar } from "./NavBar";
 
-// interface LayoutProps {
-//     selectedNavBarButton: string;
-//     sideBarContent?: ReactNode;
-//     mainContent?: ReactNode;
-//     UserProfileDetailsContent?: ReactNode;
-// }
+interface LayoutProps {
+    selectedNavBarButton: string;
+    leftRailContent?: ReactNode;
+    mainContent?: ReactNode;
+    rightRailContent?: ReactNode;
+}
 
-// export function Layout({
-//     selectedNavBarButton,
-//     sideBarContent,
-//     mainContent,
-// }: LayoutProps) {
+export function Layout({
+    selectedNavBarButton,
+    leftRailContent,
+    mainContent,
+    rightRailContent,
+}: LayoutProps) {
 
-//     return (
-//         <>
-//             <Meta title="Chat App" />
+    return (
+        
+        <div className="flex flex-col lg:flex-row"> {/* adjusts the layout to stack elements vertically on smaller screens and horizontally on larger screens */}
 
-//             <div className="lg:flex">
-//                 {/* <!-- Start left sidebar-menu --> */}
-//                 <NavBar selected={selectedNavBarButton}
-//                 />
-//                 {/* <!-- End left sidebar-menu --> */}
+            {/* Start nav sidebar-menu */}
+            <NavBar selected={selectedNavBarButton} />
+            {/* End nav sidebar-menu */}
 
-//                 {sideBarContent && (
-//                     <div className="lg:w-[380px] ">
-//                         <div>
-//                             <div className="tab-content active"> {sideBarContent} </div>
-//                         </div>
-//                     </div>
-//                 )}
+            {/* Optional left rail content */}
+            {leftRailContent && (
+                <div className="lg:w-[380px] lg:block hidden">
+                    <div className="tab-content active">{leftRailContent}</div>
+                </div>
+            )}
 
-//                 {/* <!-- Start User chat --> */}
-//                 <div className={`w-full overflow-hidden transition-all duration-150 ${mainContent && !sideBarContent ? '' : ''}`}>
-//                     {mainContent}
-//                 </div>
-//                 {/* <!-- End User chat --> */}
+            {/* Main content */}
+            <div className={`flex-1 overflow-hidden transition-all duration-150 ${mainContent && !leftRailContent && !rightRailContent ? 'bg-lime-100' : ''}`}>
+                {mainContent}
+            </div>
 
-//             </div>
-//         </>
-//     );
-// }
+            {/* Optional right rail content */}
+            {rightRailContent && (
+                <div className="lg:w-[380px] lg:block hidden">
+                    <div className="tab-content active">{rightRailContent}</div>
+                </div>
+            )}
+        </div>
+    );
+}
