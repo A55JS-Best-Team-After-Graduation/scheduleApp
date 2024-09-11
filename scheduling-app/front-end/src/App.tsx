@@ -1,18 +1,19 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, lazy, Suspense } from 'react';
 import './App.css';
-import { Authentacation } from './components/Authentacation';
-import { NavBar } from './components/NavBar';
+import { Authentacation } from './hoc/Authentacation';
+import { NavBar } from './components/Header/NavBar';
 import Feedback from './components/Feedback';
 import TeamsLayout from './components/TeamsLayout';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Lazy loading components
 const Register = lazy(() => import('./components/Register'));
 const Login = lazy(() => import('./components/Login'));
 const UpdateUser = lazy(() => import('./components/UpdateUser'));
-const Calendar = lazy(() => import('./components/Calendar'));
-const Tasks = lazy(() => import('./components/Tasks'));  // Assuming Tasks is a component
-const ApplyToTeam = lazy(() => import('./components/ApplyToTeam'));  // Assuming ApplyToTeam is a component
+// const Calendar = lazy(() => import('./components/Calendar'));
+// const Tasks = lazy(() => import('./components/Tasks'));  // Assuming Tasks is a component
+// const ApplyToTeam = lazy(() => import('./components/ApplyToTeam'));  // Assuming ApplyToTeam is a component
 
 interface FeedbackProps {
   message: string;
@@ -36,6 +37,7 @@ function App() {
       <NavBar showFeedback={showFeedback} />
       <Feedback message={feedback.message} type={feedback.type} />
       <Suspense fallback={<div>Loading...</div>}>
+      <ErrorBoundary>
         <Routes>
           {/* Redirect from root to /register */}
           <Route path="/" element={<Navigate to="/register" replace />} />
@@ -63,6 +65,7 @@ function App() {
           {/* Fallback route for undefined paths */}
           <Route path="*" element={<div>404 - Page Not Found</div>} />
         </Routes>
+        </ErrorBoundary>
       </Suspense>
     </BrowserRouter>
   );

@@ -1,19 +1,23 @@
-import { useState, useContext } from 'react';
+import React, { useState, useContext, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateForm, registerUser } from '../../service/service.js';
-import { AppContext } from '../AppContext.jsx';
-import './Register.css'; 
+import { validateForm, registerUser } from '../service/service';
+import { AppContext } from '../context/AppContext';
+import './Register.css';
 
- const Register = ({ showFeedback }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
+interface RegisterProps {
+  showFeedback: (message: string, type: 'success' | 'error') => void;
+}
 
-  const { login } = useContext(AppContext); 
+const Register: React.FC<RegisterProps> = ({ showFeedback }) => {
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const { login } = useContext(AppContext) as { login: (user: any, token: string) => void };
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationError = validateForm({ username, email, password });
@@ -28,10 +32,12 @@ import './Register.css';
       const data = await registerUser({ username, password, email });
       login(data.user, data.token); // Persist user and token
       showFeedback('Registration successful! Redirecting...', 'success');
-      navigate('/chat');  // Redirect to home or authenticated area
+      navigate('/chat'); // Redirect to home or authenticated area
 
     } catch (err) {
-      showFeedback(err.message || 'Failed to register. Please try again later.', 'error');
+      // Handle `err` as an `Error` object
+      const errorMessage = (err as Error).message || 'Failed to register. Please try again later.';
+      showFeedback(errorMessage, 'error');
     } finally {
       setLoading(false);
     }

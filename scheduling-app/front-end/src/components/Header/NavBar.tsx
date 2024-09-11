@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { logoutUser } from "../service/auth.service";
-import { AppContext } from "../AppContext";
+import { logoutUser } from "../../service/service";
+import { AppContext } from "../../context/AppContext";
 
 const NavBar=({ selected }) => {
   const { user, setUser } = useContext(AppContext);
@@ -34,41 +34,18 @@ const NavBar=({ selected }) => {
         <div className="w-full mx-auto lg:my-auto">
           <ul id="tabs" className="flex flex-row justify-center w-full lg:flex-col lg:flex nav-tabs" >
 
-            {/*chats*/}
+            {/*Teams*/}
             <li className="flex-grow lg:flex-grow-0">
-              <NavLink to="/chats" className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "chats" ? "active" : ""}`} >
+              <NavLink to="/groups" className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "teams" ? "active" : ""}`} >
                 <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
                   <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
                   <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
-                    Chats
+                    Teams
                   </span>
                 </div>
               </NavLink>
             </li>
 
-            {/*groups*/}
-            <li className="flex-grow lg:flex-grow-0">
-              <NavLink to="/groups" className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "groups" ? "active" : ""}`} >
-                <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
-                  <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
-                  <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
-                    Groups
-                  </span>
-                </div>
-              </NavLink>
-            </li>
-
-            {/*contacts*/}
-            <li className="flex-grow lg:flex-grow-0">
-              <NavLink to="/contacts" className={`tab-button relative flex items-center justify-center mx-auto h-14 w-14 leading-[14px] group/tab my-2 rounded-lg cursor-pointer ${selected === "contacts" ? "active" : ""}`}>
-                <div className="absolute items-center hidden -top-10 ltr:left-0 group-hover/tab:flex rtl:right-0">
-                  <div className="absolute -bottom-1 left-[40%] w-3 h-3 rotate-45 bg-black"></div>
-                  <span className="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black rounded shadow-lg">
-                    Contacts
-                  </span>
-                </div>
-              </NavLink>
-            </li>
           </ul>
         </div>
 
