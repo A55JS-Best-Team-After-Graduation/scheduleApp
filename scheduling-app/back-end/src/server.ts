@@ -31,7 +31,15 @@ const getEnvVariable = (key: string, defaultValue?: string): string => {
 };
 
 const PORT: number = parseInt(getEnvVariable('PORT', '3500'), 10);
-const CORS_ORIGIN: string = getEnvVariable('CORS_ORIGIN', 'http://localhost:3500');
+
+// CORS logic
+const parseOrigins = (origins: string): string[] => origins.split(',').map((origin) => origin.trim());
+const isCORSDisabled = process.env.CORS_ORIGIN_PROD === 'false';
+const CORS_ORIGIN = process.env.NODE_ENV === 'production'
+  ? isCORSDisabled
+    ? false
+    : process.env.CORS_ORIGIN_PROD || ''
+  : parseOrigins(process.env.CORS_ORIGIN_DEV || '');
 
 // Create HTTP server
 const httpServer = createServer(app);

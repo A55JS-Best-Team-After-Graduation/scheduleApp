@@ -10,4 +10,7 @@ router.post('/register', registerUser);
 // Route for user login
 router.post('/login', loginUser);
 
+// Route for update user data
+router.post('/:id', );
+
 export default router;

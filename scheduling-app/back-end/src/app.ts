@@ -13,15 +13,6 @@ dotenv.config(); // Load environment variables
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// CORS logic
-const parseOrigins = (origins: string): string[] => origins.split(',').map((origin) => origin.trim());
-const isCORSDisabled = process.env.CORS_ORIGIN_PROD === 'false';
-const CORS_ORIGIN = process.env.NODE_ENV === 'production'
-  ? isCORSDisabled
-    ? false
-    : process.env.CORS_ORIGIN_PROD || ''
-  : parseOrigins(process.env.CORS_ORIGIN_DEV || '');
-
 // Connect to MongoDB
 connectDB();
 
