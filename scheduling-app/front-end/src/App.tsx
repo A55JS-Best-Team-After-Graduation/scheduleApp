@@ -6,6 +6,7 @@ import { Authentication } from './hoc/Authentication';
 import Feedback from './components/Feedback';
 import TeamsLayout from './components/TeamsLayout';
 import ErrorBoundary from './components/ErrorBoundary';
+import { Home } from './Home';
 
 // Lazy loading components
 const Register = lazy(() => import('./views/Register'));
@@ -17,13 +18,13 @@ const UpdateUser = lazy(() => import('./views/UpdateUser'));
 
 interface FeedbackProps {
   message: string;
-  type: string;
+  type: any;
 }
 
 function App() {
   const [feedback, setFeedback] = useState<FeedbackProps>({ message: '', type: '' });
 
-  const showFeedback = (message: string, type: string) => {
+  const showFeedback = (message: string, type: any) => {
     if (typeof message !== 'string') {
       console.error('showFeedback: Expected a string for message prop');
       return;
@@ -45,6 +46,8 @@ function App() {
             {/* Public routes */}
             <Route path="/register" element={<Register showFeedback={showFeedback} />} />
             <Route path="/login" element={<Login showFeedback={showFeedback} />} />
+
+            <Route path="/home" element={<Authentication ><Home/></Authentication>} />
 
             {/* Protected routes */}
             {/* <Route element={<Authentication />}>

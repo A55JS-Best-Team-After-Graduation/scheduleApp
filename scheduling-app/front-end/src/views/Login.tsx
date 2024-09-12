@@ -80,6 +80,7 @@ const Login: React.FC<LoginProps> = ({ showFeedback }) => {
       }
 
       const data: LoginResponse = await response.json();
+      console.log('Login Response:', data); // <-- Log the response here
 
       if (!data || !data.id || !data.username || !data.token) {
         throw new Error('Invalid login response');
@@ -89,7 +90,7 @@ const Login: React.FC<LoginProps> = ({ showFeedback }) => {
       login({ id: data.id, username: data.username, email: data.email }, data.token);
 
       showFeedback('Login successful!', 'success');
-      navigate('/teams');
+      navigate('/home');
     } catch (err) {
       const errorMessage = (err as Error).message || 'Failed to login. Please check your credentials and try again.';
       showFeedback(errorMessage, 'error');
