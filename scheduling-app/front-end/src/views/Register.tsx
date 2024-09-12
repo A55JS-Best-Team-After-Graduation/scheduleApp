@@ -2,7 +2,6 @@ import React, { useState, useContext, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateForm } from '../service/service';
 import { AppContext } from '../context/AppContext';
-import './Register.css';
 
 interface RegisterProps {
   showFeedback: (message: string, type: 'success' | 'error') => void;
