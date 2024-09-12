@@ -1,3 +1,4 @@
+// app.ts is the entry point for the back-end server
 import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';

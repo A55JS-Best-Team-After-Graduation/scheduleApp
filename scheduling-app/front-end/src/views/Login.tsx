@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
-import { loginUser } from '../service/service';
 
 interface LoginProps {
   showFeedback: (message: string, type: 'success' | 'error') => void;
@@ -19,40 +18,80 @@ const Login: React.FC<LoginProps> = ({ showFeedback }) => {
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { user, login } = useContext(AppContext) as {
+  const { login } = useContext(AppContext) as {
     user: { id: string; username: string; email: string } | null;
     login: (user: { id: string; username: string; email: string }, token: string) => void;
   };
+
   const navigate = useNavigate();
 
+  // Auto-login using token if it exists
   useEffect(() => {
-    if (user) {
-      console.log('User updated:', user);
-      navigate('/chat'); // Redirect if user is already logged in
+    const token = localStorage.getItem('token');
+    if (token) {
+      autoLogin(token);
     }
-  }, [user, navigate]);
+  }, []);
+
+  const autoLogin = async (token: string) => {
+    try {
+      const response = await fetch('/api/users/verify-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // Send token in headers for verification
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Invalid token');
+      }
+
+      const data: LoginResponse = await response.json();
+
+      if (!data || !data.id || !data.username || !data.email) {
+        throw new Error('Invalid token data');
+      }
+
+      login({ id: data.id, username: data.username, email: data.email }, token);
+      showFeedback('Logged in automatically!', 'success');
+      navigate('/teams');
+    } catch (error) {
+      console.error('Auto login failed:', (error as Error).message);
+      // Allow manual login
+    }
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const data = await loginUser({ email, password }) as LoginResponse;
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      if (!data || !data.username || !data.token || !data.id) {
-        console.log('LoginData:', data);
-        throw new Error("Username, id, or token is missing in the response");
+      if (!response.ok) {
+        throw new Error('Invalid credentials');
       }
 
-      // Update context with user info, including id
+      const data: LoginResponse = await response.json();
+
+      if (!data || !data.id || !data.username || !data.token) {
+        throw new Error('Invalid login response');
+      }
+
+      // Store token and user info in local storage and context
       login({ id: data.id, username: data.username, email: data.email }, data.token);
 
       showFeedback('Login successful!', 'success');
-      navigate('/chat');
+      navigate('/teams');
     } catch (err) {
-      // Handle `err` as an `Error` object
       const errorMessage = (err as Error).message || 'Failed to login. Please check your credentials and try again.';
-      console.error('Login error:', errorMessage);
       showFeedback(errorMessage, 'error');
     } finally {
       setLoading(false);

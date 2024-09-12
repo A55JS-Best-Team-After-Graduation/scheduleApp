@@ -3,7 +3,7 @@ import { fetchUserDetails, verifyToken } from '../service/service';
 
 interface User {
   id: string;
-  name: string;
+  username: string;
   email: string;
   // Add more fields as needed, but do not include password
   // instead of password, we can use token: After a user logs in, use authentication tokens (like JWT) for managing user sessions. These tokens should be securely stored (e.g., in HTTP-only cookies) and used for authorization.

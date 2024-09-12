@@ -1,6 +1,6 @@
 import React, { useState, useContext, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateForm, registerUser } from '../service/service';
+import { validateForm } from '../service/service';
 import { AppContext } from '../context/AppContext';
 import './Register.css';
 
@@ -10,8 +10,8 @@ interface RegisterProps {
 
 const Register: React.FC<RegisterProps> = ({ showFeedback }) => {
   const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const { login } = useContext(AppContext) as { login: (user: any, token: string) => void };
@@ -29,14 +29,21 @@ const Register: React.FC<RegisterProps> = ({ showFeedback }) => {
     setLoading(true);
 
     try {
-      const data = await registerUser({ username, password, email });
+      const response = await fetch('/api/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+      const data = await response.json();
       login(data.user, data.token); // Persist user and token
       showFeedback('Registration successful! Redirecting...', 'success');
-      navigate('/chat'); // Redirect to home or authenticated area
+      navigate('/login'); // 
 
-    } catch (err) {
+    } catch (error) {
       // Handle `err` as an `Error` object
-      const errorMessage = (err as Error).message || 'Failed to register. Please try again later.';
+      const errorMessage = (error as Error).message || 'Failed to register. Please try again later.';
       showFeedback(errorMessage, 'error');
     } finally {
       setLoading(false);
