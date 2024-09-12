@@ -1,3 +1,4 @@
+// app.ts is the entry point for the back-end server
 import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -23,7 +24,7 @@ const app = express();
 app.use(express.json());
 
 // API Routes
-app.use('/api/users', userRoutes); // Handles /api/users/register, /api/users/login
+app.use('/api/users', userRoutes); // Handles /api/users/register, /api/users/login, /api/users/update/:userId, /api/users/delete/:userId, /api/users/all
 app.use('/api/teams', teamRoutes); // Handles /api/teams/create, /api/teams/join, /api/teams/leave
 app.use('/api/messages', messageRoutes); // Handles /api/messages/send, /api/messages/:teamId
 
